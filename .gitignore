@@ -7,12 +7,6 @@ env/
 *.env
 
 
-# Assets
-/assets
-*.mp3
-
-
-
 # cache
 __pycache__
 .mypy_cache

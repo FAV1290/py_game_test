@@ -10,7 +10,6 @@ class Player:
     default_pos_y = SCREEN_HEIGHT // 2
     default_model_filepath = DEFAULT_MODEL_FILEPATH
 
-
     def __init__(
         self, 
         model_filepath: str = default_model_filepath,
@@ -21,11 +20,9 @@ class Player:
         self.pos_y = pos_y
         self.model_filepath = model_filepath
 
-
     def create_surface(self) -> pygame.Surface:
         return pygame.image.load(self.model_filepath)
     
-
     def create_rect(self) -> pygame.Rect:
         return self.create_surface().get_rect(center=(self.pos_x, self.pos_y))
     

@@ -1,19 +1,16 @@
-import pygame
-
-
-from constants import AMBIENT_FILEPATH
+from config import TARGET_FPS, SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 class Settings:
-    def __init__(self):
+    def __init__(
+        self,
+        target_fps: int = TARGET_FPS,
+        screen_width: int = SCREEN_WIDTH,
+        screen_height: int = SCREEN_HEIGHT,
+    ):
         self.game_on = True
-        self.is_ambient_active = False
-
-    def quit_game(self) -> None:
-        self.game_on = False
-        pygame.quit()
-    
-    def initialize_ambient(self) -> None:
-        pygame.mixer.music.load(AMBIENT_FILEPATH)
-        pygame.mixer.music.play(-1)
         self.is_ambient_active = True
+        self.target_fps = target_fps
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+

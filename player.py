@@ -1,28 +1,22 @@
-import pygame
+import pygame as pg
 
 
-from config import SCREEN_WIDTH, SCREEN_HEIGHT
-from constants import DEFAULT_MODEL_FILEPATH
+from constants import PLAYER_SPRITE_FILEPATH
 
 
-class Player:
-    default_pos_x = SCREEN_WIDTH // 2
-    default_pos_y = SCREEN_HEIGHT // 2
-    default_model_filepath = DEFAULT_MODEL_FILEPATH
-
+class Player(pg.sprite.Sprite):
     def __init__(
         self, 
-        model_filepath: str = default_model_filepath,
-        pos_x: int = default_pos_x,
-        pos_y: int = default_pos_y
+        pos_x: int,
+        pos_y: int,
+        sprite_filepath: str = PLAYER_SPRITE_FILEPATH,
     ) -> None:
+        pg.sprite.Sprite.__init__(self)
         self.pos_x = pos_x
         self.pos_y = pos_y
-        self.model_filepath = model_filepath
-
-    def create_surface(self) -> pygame.Surface:
-        return pygame.image.load(self.model_filepath)
+        self.image = pg.image.load(sprite_filepath).convert_alpha()
+        self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+        self.score = 0
     
-    def create_rect(self) -> pygame.Rect:
-        return self.create_surface().get_rect(center=(self.pos_x, self.pos_y))
-    
+    def update(self):
+        self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))

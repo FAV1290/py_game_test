@@ -1,7 +1,12 @@
-#Environments
+# Environments
 env
 ENV
 venv
 VENV
 env/
 *.env
+
+
+# cache
+__pycache__
+.mypy_cache

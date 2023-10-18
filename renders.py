@@ -14,19 +14,26 @@ from constants import (
 
 def draw_score(base_surface: pg.Surface, player: Player) -> None:
     score_font = pg.font.Font(INTERFACE_FONT, INTERFACE_FONT_SIZE)
-    score_surface = score_font.render(str(player.score), True, RGB_WHITE, None)
-    base_surface.blit(score_surface, score_surface.get_rect(center=(50, 50)))    
+    score_surface = score_font.render(f'{str(player.score * 100000)}$', True, RGB_WHITE, None)
+    base_surface.blit(score_surface, score_surface.get_rect(topleft=(20, 20)))    
 
 
-def render_frame(base_surface: pg.Surface, player: Player, pickups_group: pg.sprite.Group, settings: Settings) -> None:
+def render_frame(
+    base_surface: pg.Surface,
+    player: Player,
+    pickups_group: pg.sprite.Group,
+    enemies_group: pg.sprite.Group,
+    settings: Settings
+) -> None:
     background = pg.image.load(BACKGROUND_FILEPATH).convert()
     background = pg.transform.scale(background, (settings.screen_width, settings.screen_height))
     base_surface.blit(background, (0, 0))
     pickups_group.draw(base_surface)
+    enemies_group.draw(base_surface)
     base_surface.blit(player.image, player.rect)
     draw_score(base_surface, player)
-    pg.display.update()
     Pickup.pickups.update()
+    pg.display.update()
 
 
 def render_intro(base_surface: pg.Surface, settings: Settings) -> None:

@@ -7,7 +7,7 @@ from constants import PICKUP_SPRITE_FILEPATH, PICKUP_LIFETIME_SEC
 
 
 class Pickup(pg.sprite.Sprite):
-    pickups = pg.sprite.Group()
+    pickups: pg.sprite.Group = pg.sprite.Group()
 
     def __init__(
         self,

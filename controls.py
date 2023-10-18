@@ -1,7 +1,6 @@
 import pygame as pg
 
 
-from constants import PLAYER_SPEED
 from pickup import Pickup
 from player import Player
 from settings import Settings
@@ -10,13 +9,13 @@ from settings import Settings
 def player_controls_handler(player: Player) -> Player:
     keys_pressed = pg.key.get_pressed()
     if keys_pressed[pg.K_LEFT]:
-        player.pos_x -= PLAYER_SPEED
+        player.pos_x -= player.speed
     elif keys_pressed[pg.K_RIGHT]:
-        player.pos_x += PLAYER_SPEED
+        player.pos_x += player.speed
     if keys_pressed[pg.K_UP]:
-        player.pos_y -= PLAYER_SPEED
+        player.pos_y -= player.speed
     elif keys_pressed[pg.K_DOWN]:
-        player.pos_y += PLAYER_SPEED
+        player.pos_y += player.speed
     player.update()
     return player
 

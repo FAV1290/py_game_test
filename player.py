@@ -18,7 +18,8 @@ class Player(pg.sprite.Sprite):
         self.image = pg.image.load(sprite_filepath).convert_alpha()
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
         self.score = 0
-        self.hp = 1
+        self.hp = 3
+        self.invinsibility_frames = 0
         self.speed = speed
     
     def update(self):

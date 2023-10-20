@@ -1,14 +1,14 @@
 import pygame as pg
 
 
-from pickup import Pickup
 from player import Player
 from settings import Settings
 from constants import (
-    TEXT_FONT, TEXT_FONT_SIZE, INTRO_TEXT_LIST,
+    INTRO_TEXT_FONT, INTRO_TEXT_FONT_SIZE, INTRO_TEXT_LIST,
     INTERFACE_FONT, INTERFACE_FONT_SIZE,
     RGB_BLACK, RGB_WHITE,
-    BACKGROUND_FILEPATH,
+    BACKGROUND_FILEPATH, DEATH_SCREEN_FILEPATH,
+    DEATH_SOUND_FILEPATH,
 )
 
 
@@ -23,7 +23,7 @@ def render_frame(
     player: Player,
     pickups_group: pg.sprite.Group,
     enemies_group: pg.sprite.Group,
-    settings: Settings
+    settings: Settings,
 ) -> None:
     background = pg.image.load(BACKGROUND_FILEPATH).convert()
     background = pg.transform.scale(background, (settings.screen_width, settings.screen_height))
@@ -32,20 +32,32 @@ def render_frame(
     enemies_group.draw(base_surface)
     base_surface.blit(player.image, player.rect)
     draw_score(base_surface, player)
-    Pickup.pickups.update()
     pg.display.update()
 
 
 def render_intro(base_surface: pg.Surface, settings: Settings) -> None:
-    intro_font = pg.font.Font(TEXT_FONT, TEXT_FONT_SIZE)
+    intro_font = pg.font.Font(INTRO_TEXT_FONT, INTRO_TEXT_FONT_SIZE)
     base_surface.fill(RGB_BLACK)
     line_x = settings.screen_width // 2
-    line_y = settings.screen_height // 2 - TEXT_FONT_SIZE
+    line_y = settings.screen_height // 2 - INTRO_TEXT_FONT_SIZE
     for text_line in INTRO_TEXT_LIST:
         line_surface = intro_font.render(text_line, True, RGB_WHITE, None)
         line_rect = line_surface.get_rect(center=(line_x, line_y))
         base_surface.blit(line_surface, line_rect)
-        line_y += TEXT_FONT_SIZE*2
+        line_y += INTRO_TEXT_FONT_SIZE * 2
     pg.display.update()
     pg.event.clear()
     pg.event.wait()
+
+
+def render_outro(base_surface: pg.Surface, settings: Settings) -> None:
+    pg.mixer.music.pause()
+    pg.mixer.Sound(DEATH_SOUND_FILEPATH).play()
+    death_screen_x = settings.screen_width // 2
+    death_screen_y = settings.screen_height // 2
+    death_screen_image = pg.image.load(DEATH_SCREEN_FILEPATH).convert()
+    death_screen_rect = death_screen_image.get_rect(center=(death_screen_x, death_screen_y))
+    base_surface.fill(RGB_BLACK)
+    base_surface.blit(death_screen_image, death_screen_rect)
+    pg.display.update()
+    pg.time.delay(5000)

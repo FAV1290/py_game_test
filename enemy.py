@@ -8,7 +8,6 @@ from constants import ENEMIES_SPEED
 
 
 class Enemy(pg.sprite.Sprite):
-    enemies: pg.sprite.Group = pg.sprite.Group()
     last_id = 0
 
     def __init__(
@@ -16,6 +15,7 @@ class Enemy(pg.sprite.Sprite):
         pos_x: int,
         pos_y: int,
         sprite_filepath: str,
+        enemies_group: pg.sprite.Group,
     ):
         pg.sprite.Sprite.__init__(self)
         self.pos_x = pos_x
@@ -25,7 +25,7 @@ class Enemy(pg.sprite.Sprite):
         self.speed = random.choice(ENEMIES_SPEED)
         Enemy.last_id += 1
         self.id = Enemy.last_id
-        self.add(Enemy.enemies)
+        self.add(enemies_group)
 
     def __repr__(self):
         return f'Enemy sprite #{self.id}'
@@ -38,14 +38,14 @@ class Enemy(pg.sprite.Sprite):
         sign_y = sign(other_sprite_center_y - enemy_center_y)
         return sign_x, sign_y
     
-    def update(self, player: Player) -> None:
-        collide_list = pg.sprite.spritecollide(self, Enemy.enemies, False)
+    def update(self, player: Player, enemies_group: pg.sprite.Group) -> None:
+        collide_list = pg.sprite.spritecollide(self, enemies_group, False)
         if len(collide_list) > 1:
-            for sprite in collide_list:
-                if sprite.id != self.id:
-                    sign_x, sign_y = self.__define_sprite_quadrant(sprite)
-                    self.pos_x -= sign_x * self.speed
-                    self.pos_y -= sign_y * self.speed
+            for ally_sprite in collide_list:
+                if ally_sprite.id != self.id:
+                    sign_x, sign_y = self.__define_sprite_quadrant(ally_sprite)
+                    self.pos_x -= random.choice([sign_x * self.speed, 0])
+                    self.pos_y -= random.choice([sign_y * self.speed, 0])
         else:
             sign_x, sign_y = self.__define_sprite_quadrant(player)
             self.pos_x += sign_x * self.speed

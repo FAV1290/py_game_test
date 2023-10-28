@@ -29,31 +29,32 @@ def initialize_game(settings: Settings) -> pg.Surface:
 
 def initialize_pickups(settings: Settings, pickups_group: pg.sprite.Group) -> None:
     first_pickup = Pickup(settings.screen_width, settings.screen_height, pickups_group)
-    pg.time.set_timer(pg.USEREVENT, first_pickup.lifetime_sec * 330)  
+    pg.time.set_timer(pg.USEREVENT, first_pickup.lifetime_sec * 330)
 
 
 def initialize_enemies(settings: Settings, enemies_group: pg.sprite.Group) -> None:
     random.shuffle(ENEMIES_SPRITES)
     for enemy_number in range(settings.difficulty.value):
         enemy_y = (enemy_number) * (settings.screen_height // settings.difficulty.value)
-        Enemy(settings.screen_width - 100, enemy_y, ENEMIES_SPRITES[enemy_number], enemies_group)
+        enemy = Enemy(settings.screen_width - 100, enemy_y, ENEMIES_SPRITES[enemy_number])
+        enemy.add(enemies_group)
 
 
 def respond_to_pickups_collide(
     player: Player,
     enemies_group: pg.sprite.Group,
-    pickups_group: pg.sprite.Group
+    pickups_group: pg.sprite.Group,
 ) -> Player:
     player_collide = pg.sprite.spritecollideany(player, pickups_group)
     if player_collide:
         player.score += 1
         player_collide.kill()
     for enemy_sprite in enemies_group:
-        pg.sprite.spritecollide(enemy_sprite, pickups_group, dokill=True)    
+        pg.sprite.spritecollide(enemy_sprite, pickups_group, dokill=True)
     return player
 
 
-def respond_to_enemies_collide(player: Player, enemies_group) -> Player:
+def respond_to_enemies_collide(player: Player, enemies_group: pg.sprite.Group) -> Player:
     collide = pg.sprite.spritecollideany(player, enemies_group)
     if collide and not player.invinsibility_frames:
         if player.hp > 1:
@@ -74,7 +75,7 @@ def respond_to_player_death(
     return settings
 
 
-def main() -> None: 
+def main() -> None:
     game_config = Settings()
     base_surface = initialize_game(game_config)
     current_player = Player(game_config.screen_width // 2, game_config.screen_height // 2)
@@ -92,9 +93,11 @@ def main() -> None:
         current_player = respond_to_enemies_collide(current_player, enemies)
         current_player = respond_to_pickups_collide(current_player, enemies, pickups)
         game_config = respond_to_player_death(base_surface, current_player, game_config)
-        if current_player.invinsibility_frames: current_player.invinsibility_frames -= 1
+        if current_player.invinsibility_frames:
+            current_player.invinsibility_frames -= 1
         pg.time.Clock().tick(game_config.target_fps)
     pg.quit()
+
 
 if __name__ == '__main__':
     main()

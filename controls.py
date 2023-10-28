@@ -13,7 +13,7 @@ def player_controls_handler(player: Player) -> Player:
     elif keys_pressed[pg.K_RIGHT] or keys_pressed[pg.K_d]:
         player.pos_x += player.speed
     if keys_pressed[pg.K_UP] or keys_pressed[pg.K_w]:
-        player.pos_y -= player.speed 
+        player.pos_y -= player.speed
     elif keys_pressed[pg.K_DOWN] or keys_pressed[pg.K_s]:
         player.pos_y += player.speed
     player.update()

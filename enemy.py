@@ -11,11 +11,10 @@ class Enemy(pg.sprite.Sprite):
     last_id = 0
 
     def __init__(
-        self, 
+        self,
         pos_x: int,
         pos_y: int,
         sprite_filepath: str,
-        enemies_group: pg.sprite.Group,
     ):
         pg.sprite.Sprite.__init__(self)
         self.pos_x = pos_x
@@ -25,19 +24,18 @@ class Enemy(pg.sprite.Sprite):
         self.speed = random.choice(ENEMIES_SPEED)
         Enemy.last_id += 1
         self.id = Enemy.last_id
-        self.add(enemies_group)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Enemy sprite #{self.id}'
-    
+
     def __define_sprite_quadrant(self, other_sprite: typing.Self | Player) -> tuple[int, int]:
-        sign = lambda x : (x > 0) - (x < 0)
+        sign: typing.Callable[[int], int] = lambda x: (x > 0) - (x < 0)
         enemy_center_x, enemy_center_y = self.rect.center
         other_sprite_center_x, other_sprite_center_y = other_sprite.rect.center
         sign_x = sign(other_sprite_center_x - enemy_center_x)
         sign_y = sign(other_sprite_center_y - enemy_center_y)
         return sign_x, sign_y
-    
+
     def update(self, player: Player, enemies_group: pg.sprite.Group) -> None:
         collide_list = pg.sprite.spritecollide(self, enemies_group, False)
         if len(collide_list) > 1:

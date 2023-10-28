@@ -23,7 +23,7 @@ class Pickup(pg.sprite.Sprite):
         self.created_at = time.time()
         self.lifetime_sec = lifetime_sec
         self.add(pickups_group)
- 
-    def update(self):
+
+    def update(self) -> None:
         if time.time() - self.created_at >= self.lifetime_sec:
             self.kill()

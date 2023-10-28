@@ -9,13 +9,21 @@ from constants import (
     RGB_BLACK, RGB_WHITE,
     BACKGROUND_FILEPATH, DEATH_SCREEN_FILEPATH,
     DEATH_SOUND_FILEPATH,
+    HP_UNIT_FILEPATH,
 )
 
 
 def draw_score(base_surface: pg.Surface, player: Player) -> None:
     score_font = pg.font.Font(INTERFACE_FONT, INTERFACE_FONT_SIZE)
     score_surface = score_font.render(f'{str(player.score * 100000)}$', True, RGB_WHITE, None)
-    base_surface.blit(score_surface, score_surface.get_rect(topleft=(20, 20)))    
+    base_surface.blit(score_surface, score_surface.get_rect(topleft=(20, 80)))
+
+
+def draw_hp_bar(base_surface: pg.Surface, player: Player) -> None:
+    for hp_unit in range(player.hp):
+        hp_surface = pg.image.load(HP_UNIT_FILEPATH).convert_alpha()
+        hp_unit_x = 20 + hp_unit*40
+        base_surface.blit(hp_surface, hp_surface.get_rect(topleft=(hp_unit_x, 20)))
 
 
 def render_frame(
@@ -32,6 +40,7 @@ def render_frame(
     enemies_group.draw(base_surface)
     base_surface.blit(player.image, player.rect)
     draw_score(base_surface, player)
+    draw_hp_bar(base_surface, player)
     pg.display.update()
 
 

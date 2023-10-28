@@ -6,7 +6,7 @@ from constants import PLAYER_SPRITE_FILEPATH, PLAYER_SPEED
 
 class Player(pg.sprite.Sprite):
     def __init__(
-        self, 
+        self,
         pos_x: int,
         pos_y: int,
         sprite_filepath: str = PLAYER_SPRITE_FILEPATH,
@@ -21,6 +21,6 @@ class Player(pg.sprite.Sprite):
         self.hp = 3
         self.invinsibility_frames = 0
         self.speed = speed
-    
-    def update(self):
+
+    def update(self) -> None:
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
